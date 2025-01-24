@@ -1,0 +1,7 @@
+{
+  "name": "daisyui-vue",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}
