@@ -4,35 +4,57 @@ import { useRouter, useRoute } from "vue-router";
 import { Capacitor } from "@capacitor/core";
 import { drawerEntries } from "../config/navigation";
 
+/**
+ * Props for the DrawerComponent
+ * @typedef {Object} Props
+ * @property {boolean} isOpen - Indicates whether the drawer is open or closed.
+ */
 interface Props {
   isOpen: boolean;
 }
 
+/**
+ * Define props for the component
+ */
 const props = defineProps<Props>();
+
+/**
+ * Define emitted events for the component
+ */
 const emit = defineEmits<{
-  toggle: [];
-  open: [];
-  close: [];
+  toggle: []; // Event emitted when the drawer is toggled
+  open: []; // Event emitted when the drawer is opened
+  close: []; // Event emitted when the drawer is closed
 }>();
 
 const drawerRef = ref<HTMLInputElement | null>(null);
 const router = useRouter();
 const route = useRoute();
 
+/**
+ * Check if the platform is web
+ */
 const isWeb = Capacitor.getPlatform() === "web";
 // const isWeb = true;
 const topPadding = computed(() => (isWeb ? "pt-1" : "pt-12"));
 
+/**
+ * Handle link click and emit toggle event
+ * @param {string} to - The path to navigate to
+ */
 const handleLinkClick = (to: string) => {
-  emit("toggle");
-  router.push(to);
+  emit("toggle"); // Emit toggle event
+  router.push(to); // Navigate to the specified path
 };
 
+/**
+ * Watch for changes in props.isOpen and update the drawerRef accordingly
+ */
 watch(
   () => props.isOpen,
   (newVal) => {
     if (drawerRef.value) {
-      drawerRef.value.checked = newVal;
+      drawerRef.value.checked = newVal; // Update the checkbox state
     }
   },
   { immediate: true }

@@ -4,6 +4,9 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+/**
+ * Handle back navigation
+ */
 const handleBack = () => {
   router.back();
 };
