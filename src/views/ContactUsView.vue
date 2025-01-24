@@ -6,7 +6,7 @@ import NavbarComponent from "../components/NavbarComponent.vue";
 <template>
   <div class="min-h-full p-0 flex flex-col gap-4">
     <NavbarComponent title="Contact Us">
-      <template #left-button class="w-2">
+      <template #left-button>
         <BackButton />
       </template>
     </NavbarComponent>
