@@ -13,26 +13,29 @@ const pinia = createPinia();
 
 app.use(pinia);
 
+const initializeApp = async () => {
+  supabase.auth.onAuthStateChange((event, session) => {
+    const authStore = useAuthStore();
+    if (session) {
+      authStore.user = session.user;
+      authStore.isAuthenticated = true;
+    } else {
+      authStore.user = null;
+      authStore.isAuthenticated = false;
+    }
+  });
 
-supabase.auth.onAuthStateChange((event, session) => {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   const authStore = useAuthStore();
   if (session) {
     authStore.user = session.user;
     authStore.isAuthenticated = true;
-  } else {
-    authStore.user = null;
-    authStore.isAuthenticated = false;
   }
-});
 
-const {
-  data: { session },
-} = await supabase.auth.getSession();
-if (session) {
-  const authStore = useAuthStore();
-  authStore.user = session.user;
-  authStore.isAuthenticated = true;
-}
+  app.use(router);
+  app.mount("#app");
+};
 
-app.use(router);
-app.mount("#app");
+initializeApp();
