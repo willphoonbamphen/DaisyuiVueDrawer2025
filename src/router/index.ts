@@ -35,6 +35,11 @@ const router = createRouter({
       name: "sign-in",
       component: () => import("../views/auth/SignInView.vue"),
     },
+    {
+      path: "/sign-up",
+      name: "sign-up",
+      component: () => import("../views/auth/SignUpView.vue"),
+    },
   ],
 });
 
@@ -42,6 +47,7 @@ export default router;
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
+  console.log(authStore.isAuthenticated);
   const isAuthenticated = authStore.isAuthenticated; // Replace with actual authentication check
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: "sign-in" });

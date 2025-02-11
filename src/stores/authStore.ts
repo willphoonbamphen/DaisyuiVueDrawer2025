@@ -1,21 +1,32 @@
-   // src/stores/authStore.ts
-   import { defineStore } from 'pinia';
-
-   export const useAuthStore = defineStore('auth', {
-     state: () => ({
-       user: null,
-       isAuthenticated: false,
-     }),
-     actions: {
-       signIn(user: any) {
-         this.user = user;
-         this.isAuthenticated = true;
-         // Optionally, save user info to local storage
-       },
-       signOut() {
-         this.user = null;
-         this.isAuthenticated = false;
-         // Optionally, clear user info from local storage
-       },
-     },
-   });
+// src/stores/authStore.ts
+import { defineStore } from "pinia";
+import { supabase } from "@/lib/supabase"; // Import Supabase client
+import type { User } from "@supabase/supabase-js";
+export const useAuthStore = defineStore("auth", {
+  state: () => ({
+    user: null as User | null,
+    isAuthenticated: false,
+  }),
+  actions: {
+    async signIn(email: string, password: string) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+      this.user = data.user;
+      this.isAuthenticated = true;
+    },
+    async signOut() {
+      await supabase.auth.signOut();
+      this.user = null;
+      this.isAuthenticated = false;
+    },
+    async signUp(email: string, password: string) {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
+      this.user = data.user;
+      this.isAuthenticated = true;
+    },
+  },
+});
