@@ -1,11 +1,18 @@
 <!-- src/views/SignInView.vue -->
 <template>
   <div class="min-h-full p-4 flex flex-col items-center mt-14">
-    <h1 class="text-xl font-semibold mb-8">Sign In</h1>
+    <h1 class="text-xl font-semibold mb-8">Sign Up</h1>
     <form
-      @submit.prevent="handleSignIn"
+      @submit.prevent="handleSignUp"
       class="flex flex-col gap-4 w-full max-w-sm justify-center items-center"
     >
+      <input
+        type="text"
+        v-model="name"
+        placeholder="Name"
+        required
+        class="input input-bordered"
+      />
       <input
         type="email"
         v-model="email"
@@ -20,10 +27,10 @@
         required
         class="input input-bordered"
       />
-      <button type="submit" class="btn btn-primary w-42 mt-4">Sign In</button>
+      <button type="submit" class="btn btn-primary w-42 mt-4">Sign Up</button>
     </form>
     <p class="mt-4">
-      Don't have an account? <RouterLink to="/sign-up">Sign Up</RouterLink>
+      Have an account? <RouterLink to="/sign-in">Sign In</RouterLink>
     </p>
   </div>
 </template>
@@ -33,17 +40,18 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
+const name = ref("");
 const email = ref("");
 const password = ref("");
 const router = useRouter();
 const authStore = useAuthStore();
 
-const handleSignIn = async () => {
+const handleSignUp = async () => {
   try {
-    await authStore.signIn(email.value, password.value);
+    await authStore.signUp(email.value, password.value);
     router.push("/");
   } catch (error) {
-    console.error("Sign In Error:", error);
+    console.error("Sign Up Error:", error);
   }
 };
 </script>
